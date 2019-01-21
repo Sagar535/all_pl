@@ -11,7 +11,7 @@ class PLanguagesController < ApplicationController
 
   def upload
     csv_path = File.join Rails.root, 'db', 'languages.csv'
-    3.times do 
+    10.times do 
       CSV.foreach((csv_path), headers: true) do |language|
         # debugger
         PLanguage.create(
