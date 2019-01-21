@@ -1,0 +1,27 @@
+<%= form_with(model: p_language, local: true) do |form| %>
+  <% if p_language.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(p_language.errors.count, "error") %> prohibited this p_language from being saved:</h2>
+
+      <ul>
+      <% p_language.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :p_language_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wiki_link %>
+    <%= form.text_field :wiki_link, id: :p_language_wiki_link %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

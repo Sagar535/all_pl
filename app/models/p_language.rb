@@ -1,0 +1,2 @@
+class PLanguage < ApplicationRecord
+end
