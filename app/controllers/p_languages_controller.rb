@@ -6,9 +6,6 @@ class PLanguagesController < ApplicationController
   # GET /p_languages
   # GET /p_languages.json
   def index
-    if PLanguage.first.nil?
-      upload
-    end
     @p_languages = PLanguage.all
   end
 
@@ -23,6 +20,11 @@ class PLanguagesController < ApplicationController
     end
     flash[:notice] = "All Languages added to db"
     redirect_to p_languages_path
+  end
+
+  def destroy_all
+    PLanguage.delete_all 
+    redirect_to p_languages_path 
   end
 
   # GET /p_languages/1

@@ -2,6 +2,14 @@
 
 <h1>P Languages</h1>
 
+<%= form_tag p_languages_upload_path do %>
+    <%= submit_tag "Import Languages" %>
+  <% end %>
+
+  <%= form_tag p_languages_destroy_all_path do %>
+    <%= submit_tag "Delete All Languages" %>
+  <% end %>
+
 <table>
   <thead>
     <tr>
@@ -10,10 +18,9 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-
-  <tbody>
     <% @p_languages.each do |p_language| %>
       <tr>
+        <td><%= p_language.id %></td>
         <td><%= p_language.name %></td>
         <td><%= p_language.wiki_link %></td>
         <td><%= link_to 'Show', p_language %></td>
