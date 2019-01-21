@@ -11,12 +11,14 @@ class PLanguagesController < ApplicationController
 
   def upload
     csv_path = File.join Rails.root, 'db', 'languages.csv'
-    CSV.foreach((csv_path), headers: true) do |language|
-      # debugger
-      PLanguage.create(
-          name: language[0],
-          wiki_link: language[1]
-        )
+    3.times do 
+      CSV.foreach((csv_path), headers: true) do |language|
+        # debugger
+        PLanguage.create(
+            name: language[0],
+            wiki_link: language[1]
+          )
+      end
     end
     flash[:notice] = "All Languages added to db"
     redirect_to p_languages_path
