@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   get '/', to: 'p_languages#index'
   resources :p_languages
@@ -5,4 +7,5 @@ Rails.application.routes.draw do
 
   post 'p_languages/upload', to: 'p_languages#upload'
   post 'p_languages/destroy_all', to: 'p_languages#destroy_all'
+  mount Sidekiq::Web, at: "/sidekiq"
 end
