@@ -19,9 +19,7 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-    <div id="tableBody">
-      
-    </div>
+  <tbody id="tableBody">
   </tbody>
 </table>
 
@@ -30,19 +28,52 @@
 <%= link_to 'New P Language', new_p_language_path %>
 
 <script>
-  function getPLanguages() {
-    $.ajax('/p_languages.json')
+  $(document).ready(function () {
+    function getPLanguages() {
+      $.ajax('/p_languages.json')
       .done(function (data) {
-        console.log(data[0])
         data.forEach(function(item, index) {
           $("#tableBody").append('<tr>')
           $("#tableBody").append(`<td>${index + 1}</td>`)
           $("#tableBody").append(`<td>${item.name}</td>`)
           $("#tableBody").append(`<td>${item.wiki_link}</td>`)
+          $("#tableBody").append(`<a href='/p_languages/${index + 1}' id="show${index+1}" class="showLanguage"><td>Show</td></a>`)
+          $("#tableBody").append(`<a href='/p_languages/${index + 1}/edit'><td id="edit${index+1}" class="editLanguage">Edit</td></a>`)
+          $("#tableBody").append(`<a id="delete${index+1}" class="deleteLanguage"><td>Delete</td></a>`)          
           $("#tableBody").append('</tr>')
         }) 
+        // $(".showLanguage").attr("title", "My new tooltip message");
       })
-  }
+    }
 
-  getPLanguages()
+    getPLanguages()
+
+    $(document).on("mouseenter mouseleave", ".showLanguage", function () {
+      var data
+      var id = this.id.split("")[this.id.length - 1]
+      $.get(`/p_languages/${id}.json`)
+        .done(function(item) {
+          data = item
+          $(".showLanguage").attr("title", `Name: ${data.name} Wiki_Link: ${data.wiki_link}`);
+      })
+      }
+    )
+
+    $(document).on("click", '.deleteLanguage', function () {
+      console.log("Clicked delete")
+      var id = this.id.split("")[this.id.length - 1]
+      $.ajax({
+        url: '/p_languages/' + id,
+        type: 'DELETE',
+        success: function () {
+          alert("Language deleted")
+          document.location.href = '/p_languages/'
+        }
+      })
+    })
+
+    $(".deleteLanguage").on("click", function () {
+      console.log("delete clicked")
+    })
+  })
 </script>

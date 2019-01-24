@@ -1,6 +1,18 @@
 <h1>Editing P Language</h1>
 
-<%= render 'form', p_language: @p_language %>
+<%= form_for(@p_language, url: p_language_path) do |f|%>
+	<%= f.label "Name:" %>
+	<%= f.text_field :name, data: {
+		remote: true
+	} %>
+
+	<%= f.label "Wiki_link:" %>
+	<%= f.text_field :wiki_link, data: {
+		remote: true
+	} %>
+
+	<%= f.submit "Submit" %>
+<% end %>
 
 <%= link_to 'Show', @p_language %> |
 <%= link_to 'Back', p_languages_path %>
