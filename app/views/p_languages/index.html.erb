@@ -19,19 +19,30 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-    <% @p_languages.each_with_index do |(p_language), index| %>
-      <tr>
-        <td><%= index + 1 %></td>
-        <td><%= p_language.name %></td>
-        <td><%= p_language.wiki_link %></td>
-        <td><%= link_to 'Show', p_language %></td>
-        <td><%= link_to 'Edit', edit_p_language_path(p_language) %></td>
-        <td><%= link_to 'Destroy', p_language, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
+    <div id="tableBody">
+      
+    </div>
   </tbody>
 </table>
 
 <br>
 
 <%= link_to 'New P Language', new_p_language_path %>
+
+<script>
+  function getPLanguages() {
+    $.ajax('/p_languages.json')
+      .done(function (data) {
+        console.log(data[0])
+        data.forEach(function(item, index) {
+          $("#tableBody").append('<tr>')
+          $("#tableBody").append(`<td>${index + 1}</td>`)
+          $("#tableBody").append(`<td>${item.name}</td>`)
+          $("#tableBody").append(`<td>${item.wiki_link}</td>`)
+          $("#tableBody").append('</tr>')
+        }) 
+      })
+  }
+
+  getPLanguages()
+</script>
