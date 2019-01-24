@@ -1,8 +1,10 @@
 require 'test_helper'
+require 'sidekiq/testing'
 
 class PLanguagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @p_language = p_languages(:one)
+    @csv_path = File.join Rails.root, 'db', 'languages.csv'
   end
 
   test "should get index" do
@@ -45,4 +47,40 @@ class PLanguagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to p_languages_url
   end
+
+  ## Asynchronus testing
+  test "should be able to queue the task for asynchronus task" do
+    assert_equal 0, PLanguageAddWorker.jobs.size
+    PLanguageAddWorker.perform_async(@csv_path)
+    assert_equal 1, PLanguageAddWorker.jobs.size
+    PLanguageAddWorker.perform_async(@csv_path)
+    assert_equal 2, PLanguageAddWorker.jobs.size
+  end
+
+  test "after the execution of the AddWorker the database shall be filled" do
+    #clear the database for further test
+    PLanguage.delete_all
+    assert PLanguage.first.nil?
+    PLanguageAddWorker.perform_async(@csv_path)
+    PLanguageAddWorker.drain
+    assert_not PLanguage.first.nil?
+    assert 0, PLanguageAddWorker.jobs.size
+
+    #same task with inline 
+    Sidekiq::Testing.inline! do
+      PLanguage.delete_all
+      assert PLanguage.first.nil?
+      PLanguageAddWorker.perform_async(@csv_path)
+      assert_not PLanguage.first.nil?
+    end
+  end
+
+  test "after the execution of the RemoveWorker the database shall be empty" do
+    Sidekiq::Testing.inline! do
+      PLanguageAddWorker.perform_async(@csv_path)
+      PLanguageRemoveWorker.perform_async
+      assert PLanguage.first.nil?
+    end
+  end
 end
+
