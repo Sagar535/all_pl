@@ -34,12 +34,12 @@
       .done(function (data) {
         data.forEach(function(item, index) {
           $("#tableBody").append('<tr>')
-          $("#tableBody").append(`<td>${index + 1}</td>`)
+          $("#tableBody").append(`<td>${item.id}</td>`)
           $("#tableBody").append(`<td>${item.name}</td>`)
           $("#tableBody").append(`<td>${item.wiki_link}</td>`)
-          $("#tableBody").append(`<a href='/p_languages/${index + 1}' id="show${index+1}" class="showLanguage"><td>Show</td></a>`)
-          $("#tableBody").append(`<a href='/p_languages/${index + 1}/edit'><td id="edit${index+1}" class="editLanguage">Edit</td></a>`)
-          $("#tableBody").append(`<a id="delete${index+1}" class="deleteLanguage"><td>Delete</td></a>`)          
+          $("#tableBody").append(`<a href='/p_languages/${item.id}' id="show${item.id}" class="showLanguage"><td>Show</td></a>`)
+          $("#tableBody").append(`<a href='/p_languages/${item.id}/edit'><td id="edit${item.id}" class="editLanguage">Edit</td></a>`)
+          $("#tableBody").append(`<a id="delete${item.id}" class="deleteLanguage"><td>Delete</td></a>`)          
           $("#tableBody").append('</tr>')
         }) 
         // $(".showLanguage").attr("title", "My new tooltip message");
